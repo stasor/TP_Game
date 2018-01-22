@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script type="text/javascript">
+function start(){
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf;
+var lives = 3;
+var mx = 10;
+var my = 10;
+
+function draw() {
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  text();
+  ball.draw();
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  if (ball.y + ball.vy > canvas.height ||
+      ball.y + ball.vy < 0) {
+    ball.vy = -ball.vy;
+  }
+  if (ball.x + ball.vx > canvas.width ||
+      ball.x + ball.vx < 0) {
+    ball.vx = -ball.vx;
+  }
+
+  raf = window.requestAnimationFrame(draw);
+}
+
+var ball = {
+  x: 100,
+  y: 100,
+  vx: 5,
+  vy: 2,
+  radius: 25,
+  color: 'pink',
+  draw: function() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+};
+
+
+canvas.addEventListener('mouseover', function(e) {
+  raf = window.requestAnimationFrame(draw);
+});
+
+canvas.addEventListener('mouseout', function(e) {
+  window.cancelAnimationFrame(raf);
+});
+
+	canvas.addEventListener('click', function(e){
+		mx = e.clientX;
+		my = e.clientY;
+		box();
+
+		if(lives < 1){
+			//blabasd.dd
+			location.reload();
+			alert("You died");
+		}
+	});
+
+
+function text() {
+  ctx.font = '25px serif';
+  ctx.strokeText('lives:', 720, 26);
+  ctx.fillText(lives, 785, 26);
+}
+
+function box(){
+	ctx.beginPath();
+	ctx.strokeRect(mx, my, 10, 10);
+	ctx.closePath();
+	ctx.fillStyle = 'blue';
+    ctx.fill();
+}
+
+ball.draw();
+text();
+}
+
+start();
+
+  </script>
+ <style type="text/css">
+      canvas { border: 5px solid purple ; }
+ </style>
+ </head>
+ <body onload="start();">
+   <canvas id="canvas" width="800" height="600"></canvas>
+ </body>
+</html>
